@@ -1,6 +1,6 @@
 <template>
   <view>
-    <!-- #ifdef H5 -->
+    <!-- #ifdef APP-VUE || H5 -->
     <view :id="canvasId" :style="{ width: `${width}rpx`, height: `${height}rpx` }" />
     <!-- #endif -->
 
@@ -19,10 +19,9 @@
 </template>
 
 <script>
-import * as echarts from '../../static/echarts.esm.min.js'
-
 import { UniCanvas } from './uni-canvas.js'
 
+const echarts = require('../../static/echarts.min.js')
 let chart = null
 
 export default {
@@ -56,7 +55,7 @@ export default {
   mounted() {
     this.registerPreprocessor()
     this.$nextTick(() => {
-      // #ifdef H5
+      // #ifdef APP-VUE || H5
       this.renderH5()
       // #endif
 

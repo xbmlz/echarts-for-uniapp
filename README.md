@@ -18,20 +18,6 @@
 npm i echarts-for-uniapp
 ```
 
-> **注意**
-> cli 项目默认是不编译 `node_modules` 下的组件的，导致条件编译等功能失效 ，导致组件异常
-> 需要在根目录创建 `vue.config.js` 文件 ，增加 `echarts-for-uniapp` 包的编译即可正常
-> ```javascript
-> // vue.config.js
-> module.exports = {
-> 	transpileDependencies:['echarts-for-uniapp']
-> }
-> // 如果是vue3 + vite, 修改 vite.config.js 或 vite.config.ts
-> export default defineConfig({
->   optimizeDeps: ['echarts-for-uniapp']
-> })
-> ```
-
 ### 创建图表
 
 ```vue
@@ -114,6 +100,6 @@ export default {
 
 发布时，如果对文件大小要求更高，可以在 [ECharts 在线定制](https://echarts.apache.org/zh/builder.html)网页下载仅包含必要组件的包，并且选择压缩。
 
-下载的文件放在 `uni_modules/echarts-for-uniapp/static/echarts.esm.min.js`，**注意一定需要重命名为 `echarts.esm.min.js`**。
+下载的文件放在 `uni_modules/echarts-for-uniapp/static/echarts.min.js`，**注意一定需要重命名为 `echarts.min.js`**。
 
 此外，还可考虑使用微信小程序的[分包策略](https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages/independent.html)
