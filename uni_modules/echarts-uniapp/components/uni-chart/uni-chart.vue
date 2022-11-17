@@ -5,14 +5,25 @@
     <!-- #endif -->
 
     <!-- #ifdef MP-WEIXIN || MP-QQ -->
-    <canvas type="2d" :id="canvasId" :canvas-id="canvasId" :style="{ width: `${width}rpx`, height: `${height}rpx` }" />
+    <canvas
+      type="2d"
+      :id="canvasId"
+      :canvas-id="canvasId"
+      @touchstart="touchStart"
+      @touchmove.stop="touchMove"
+      @touchend="touchEnd"
+      :style="{ width: `${width}rpx`, height: `${height}rpx` }"
+    />
     <!-- #endif -->
   </view>
 </template>
 
 <script>
 import * as echarts from '../../static/echarts.esm.min.js'
+
 import { UniCanvas } from './uni-canvas.js'
+
+let chart = null
 
 export default {
   name: 'uni-chart',
@@ -38,7 +49,8 @@ export default {
       canvasId: `uni-canvas-${Date.now()}`,
       pixelRatio: uni.getSystemInfoSync().pixelRatio,
       deviceType: uni.getSystemInfoSync().deviceType,
-      sdkVersion: uni.getSystemInfoSync().SDKVersion
+      sdkVersion: uni.getSystemInfoSync().SDKVersion,
+      chart: null
     }
   },
   mounted() {
@@ -71,7 +83,7 @@ export default {
     // renderH5 TODO
     renderH5() {
       const canvasNode = document.getElementById(this.canvasId)
-      const chart = echarts.init(canvasNode)
+      chart = echarts.init(canvasNode)
       chart.setOption(this.$props.option)
     },
     // render mp-weixin
@@ -81,15 +93,13 @@ export default {
         .select(`#${this.canvasId}`)
         .node(res => {
           const canvasNode = res.node
-
           const ctx = canvasNode?.getContext('2d')
           canvasNode.width = canvasNode.width * this.pixelRatio
           canvasNode.height = canvasNode.height * this.pixelRatio
           ctx.scale(this.pixelRatio, this.pixelRatio)
-
           const canvas = new UniCanvas(ctx, canvasNode)
           echarts.setPlatformAPI({ createCanvas: () => canvas })
-          const chart = echarts.init(canvas, '', {
+          chart = echarts.init(canvas, '', {
             width: uni.upx2px(this.$props.width),
             height: uni.upx2px(this.$props.height),
             devicePixelRatio: this.pixelRatio
@@ -97,6 +107,72 @@ export default {
           chart.setOption(this.$props.option)
         })
         .exec()
+    },
+    // event
+    wrapTouch(event) {
+      for (let i = 0; i < event.touches.length; ++i) {
+        const touch = event.touches[i]
+        touch.offsetX = touch.x
+        touch.offsetY = touch.y
+      }
+      return event
+    },
+    touchStart(e) {
+      if (chart && e.touches.length > 0) {
+        const touch = e.touches[0]
+        const handler = chart.getZr().handler
+        handler.dispatch('mousedown', {
+          zrX: touch.x,
+          zrY: touch.y,
+          preventDefault: () => {},
+          stopPropagation: () => {}
+        })
+        handler.dispatch('mousemove', {
+          zrX: touch.x,
+          zrY: touch.y,
+          preventDefault: () => {},
+          stopPropagation: () => {}
+        })
+        handler.processGesture(this.wrapTouch(e), 'start')
+        this.$emit('touchStart', e)
+      }
+    },
+    touchMove(e) {
+      if (chart && e.touches.length > 0) {
+        var touch = e.touches[0]
+        var handler = chart.getZr().handler
+        handler.dispatch('mousemove', {
+          zrX: touch.x,
+          zrY: touch.y,
+          preventDefault: () => {},
+          stopImmediatePropagation: () => {},
+          stopPropagation: () => {}
+        })
+        handler.processGesture(this.wrapTouch(e), 'change')
+        this.$emit('touchMove', e)
+      }
+    },
+    touchEnd(e) {
+      if (chart) {
+        const touch = e.changedTouches ? e.changedTouches[0] : {}
+        var handler = chart.getZr().handler
+        handler.dispatch('mouseup', {
+          zrX: touch.x,
+          zrY: touch.y,
+          preventDefault: () => {},
+          stopImmediatePropagation: () => {},
+          stopPropagation: () => {}
+        })
+        handler.dispatch('click', {
+          zrX: touch.x,
+          zrY: touch.y,
+          preventDefault: () => {},
+          stopImmediatePropagation: () => {},
+          stopPropagation: () => {}
+        })
+        handler.processGesture(this.wrapTouch(e), 'end')
+        this.$emit('touchEnd', e)
+      }
     },
     // utils
     compareVersion(v1, v2) {
