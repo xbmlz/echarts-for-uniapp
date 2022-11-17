@@ -8,7 +8,7 @@
 
 ### 方式一: 使用 uni_modules 安装（推荐）
 
-使用 `uni_modules` 方式安装组件库，可以直接通过插件市场导入，通过右键菜单快速更新组件，不需要引用、注册，直接在页面中使用 `echarts-for-uniapp` 组件。[点击安装 echarts-for-uniapp 组件库](https://ext.dcloud.net.cn/plugin?id=)
+使用 `uni_modules` 方式安装组件库，可以直接通过插件市场导入，通过右键菜单快速更新组件，不需要引用、注册，直接在页面中使用 `echarts-for-uniapp` 组件。[点击安装 echarts-for-uniapp 组件库](https://ext.dcloud.net.cn/plugin?name=echarts-for-uniapp)
 
 ### 方式二: 使用 npm 安装
 

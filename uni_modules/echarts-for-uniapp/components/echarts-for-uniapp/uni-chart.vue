@@ -33,7 +33,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 500
+      default: 450
     },
     option: {
       type: Object,

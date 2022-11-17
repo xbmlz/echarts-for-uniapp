@@ -1,16 +1,16 @@
 {
   "id": "echarts-for-uniapp",
   "name": "echarts-for-uniapp",
-  "displayName": "Apache ECharts 的 uni-app 版本, 支持 Vue2/3",
+  "displayName": "echarts-for-uniapp",
   "version": "1.0.0",
-  "description": "开发者可以通过熟悉的 ECharts 配置方式，快速开发图表，满足各种可视化需求.",
+  "description": "uni-app 版本 echarts, 支持 Vue2/3, 开发者可以通过熟悉的 ECharts 配置方式，快速开发图表，满足各种可视化需求.",
   "keywords": [
     "echarts-uniapp",
     "echarts",
     "echarts",
     "图表",
     "可视化"
-  ],
+],
   "scripts": {
     "release": "bumpp && npm publish"
   },
