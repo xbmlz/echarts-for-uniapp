@@ -2,5 +2,6 @@
 
 ## TODO
 
-- [ ] h5
-- [ ] weixin
+- [x] h5
+- [x] mp-weixin
+- [x] mp-qq
