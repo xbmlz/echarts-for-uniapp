@@ -1,40 +1,47 @@
 <template>
-  <view>
-    <!-- #ifdef APP-VUE || H5 -->
-    <view :id="canvasId" :style="{ width: `${width}rpx`, height: `${height}rpx` }" />
-    <!-- #endif -->
+  <!-- #ifdef APP-VUE || H5 -->
+  <view v-if="systemInfo.deviceType === 'pc'" :id="canvasId" class="uni-canvas" @click="emits('click', $event)" />
+  <view
+    v-else
+    :id="canvasId"
+    class="uni-canvas"
+    @click="emits('click', $event)"
+    @touchstart="touchStart"
+    @touchmove.stop="touchMove"
+    @touchend="touchEnd"
+  />
+  <!-- #endif -->
 
-    <!-- #ifdef MP-WEIXIN || MP-QQ -->
-    <canvas
-      type="2d"
-      :id="canvasId"
-      :canvas-id="canvasId"
-      @touchstart="touchStart"
-      @touchmove.stop="touchMove"
-      @touchend="touchEnd"
-      :style="{ width: `${width}rpx`, height: `${height}rpx` }"
-    />
-    <!-- #endif -->
-  </view>
+  <!-- #ifdef MP-WEIXIN || MP-QQ -->
+  <canvas
+    type="2d"
+    :id="canvasId"
+    class="uni-canvas"
+    :canvas-id="canvasId"
+    @click="emits('click', $event)"
+    @touchstart="touchStart"
+    @touchmove.stop="touchMove"
+    @touchend="touchEnd"
+  />
+  <!-- #endif -->
 </template>
 
 <script>
+// #ifdef VUE3
+import '../../static/echarts.min.js'
+// #endif
+
+// #ifdef VUE2 || MP-WEIXIN
+const echarts = require('../../static/echarts.min.js')
+// #endif
+
 import { UniCanvas } from './uni-canvas.js'
 
-const echarts = require('../../static/echarts.min.js')
-let chart = null
+let chart
 
 export default {
   name: 'uni-chart',
   props: {
-    width: {
-      type: Number,
-      default: 750
-    },
-    height: {
-      type: Number,
-      default: 450
-    },
     option: {
       type: Object,
       require: true,
@@ -46,15 +53,13 @@ export default {
   data() {
     return {
       canvasId: `uni-canvas-${Date.now()}`,
-      pixelRatio: uni.getSystemInfoSync().pixelRatio,
-      deviceType: uni.getSystemInfoSync().deviceType,
-      sdkVersion: uni.getSystemInfoSync().SDKVersion,
-      chart: null
+      systemInfo: uni.getSystemInfoSync(),
     }
   },
   mounted() {
-    this.registerPreprocessor()
+    // console.log(uni.getSystemInfoSync())
     this.$nextTick(() => {
+      this.registerPreprocessor()
       // #ifdef APP-VUE || H5
       this.renderH5()
       // #endif
@@ -79,7 +84,7 @@ export default {
         }
       })
     },
-    // renderH5 TODO
+    // renderH5
     renderH5() {
       const canvasNode = document.getElementById(this.canvasId)
       chart = echarts.init(canvasNode)
@@ -93,14 +98,14 @@ export default {
         .node(res => {
           const canvasNode = res.node
           const ctx = canvasNode?.getContext('2d')
-          canvasNode.width = canvasNode.width * this.pixelRatio
-          canvasNode.height = canvasNode.height * this.pixelRatio
+          canvasNode.width = canvasNode.width * this.systemInfo.pixelRatio
+          canvasNode.height = canvasNode.height * this.systemInfo.pixelRatio
           ctx.scale(this.pixelRatio, this.pixelRatio)
           const canvas = new UniCanvas(ctx, canvasNode)
           echarts.setPlatformAPI({ createCanvas: () => canvas })
           chart = echarts.init(canvas, '', {
-            width: uni.upx2px(this.$props.width),
-            height: uni.upx2px(this.$props.height),
+            width: canvasNode.width,
+            height: canvasNode.width,
             devicePixelRatio: this.pixelRatio
           })
           chart.setOption(this.$props.option)
@@ -200,3 +205,10 @@ export default {
   }
 }
 </script>
+<style>
+.uni-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+</style>

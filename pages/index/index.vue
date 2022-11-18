@@ -16,6 +16,9 @@ export default {
       option: {
         xAxis: {
           type: 'category',
+          axisLabel: {
+            fontSize: 14
+          },
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
         yAxis: {
@@ -217,7 +220,7 @@ export default {
 
 <style>
 .content {
-  width: 500rpx;
-  height: 500rpx;
+  width: 390px;
+  height: 350px;
 }
 </style>

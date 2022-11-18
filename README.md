@@ -15,7 +15,7 @@
 在 `vue-cli` 项目中可以使用 `npm` 安装 `echarts-for-uniapp` 库 ，或者直接在 `HBuilderX` 项目中使用 `npm` 。（不推荐后一种方式）
 
 ```bash
-npm i echarts-for-uniapp
+npm i uniapp-echarts
 ```
 
 ### 创建图表
@@ -68,6 +68,7 @@ export default {
 | --- | --- |
 | ✔️ | ✔️ |
 
+
 | APP-VUE | APP-NVUE | 小程序 | WEB/H5 |
 | --- | --- | --- | --- |
 | ✔️ | ❌ | ✔ | ✔ |
@@ -76,10 +77,8 @@ export default {
 
 | 参数名 | 类型 | 默认值 | 描述 |
 | :--: | :--: | :--: | :-- |
-| width | Number | 750 | 画布宽度, 单位rpx或px |
-| height | Number | 500 | 画布高度, 单位rpx或px |
 | option | Object |  | [ECharts Option](https://echarts.apache.org/zh/option.html) |
-| theme | Object|String |  | [Eharts Theme](https://echarts.apache.org/handbook/zh/concepts/style/) |
+| theme | Object|String | [Eharts Theme](https://echarts.apache.org/handbook/zh/concepts/style/) |
 
 
 ### 事件
@@ -94,6 +93,8 @@ export default {
 | mousemove |  | event | 移动 |
 | mouseup |  | event | 松开 |
 
+## FAQ
+
 ### 文件太大怎么办？
 
 本项目默认提供的 ECharts 文件是最新版本的包含所有组件文件。可以下载不同版本的 [ECharts](https://github.com/apache/echarts/blob/master/dist/) 进行替换。建议调试时使用未压缩版本，发布时使用压缩版本，否则文件会太大无法发布。
@@ -103,3 +104,6 @@ export default {
 下载的文件放在 `uni_modules/echarts-for-uniapp/static/echarts.min.js`，**注意一定需要重命名为 `echarts.min.js`**。
 
 此外，还可考虑使用微信小程序的[分包策略](https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages/independent.html)
+
+
+如有其它问题，也欢迎在 [issue](https://github.com/xbmlz/echarts-for-uniapp/issues) 中向我们反馈，谢谢！
