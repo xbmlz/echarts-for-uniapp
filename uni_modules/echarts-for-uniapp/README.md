@@ -77,6 +77,7 @@ export default {
 
 | 参数名 | 类型 | 默认值 | 描述 |
 | :--: | :--: | :--: | :-- |
+| forceUseOldCanvas | Boolean | false  | 强制使用旧版Canvas(不推荐) |
 | option | Object |  | [ECharts Option](https://echarts.apache.org/zh/option.html) |
 | theme | Object|String | [Eharts Theme](https://echarts.apache.org/handbook/zh/concepts/style/) |
 
@@ -106,4 +107,4 @@ export default {
 此外，还可考虑使用微信小程序的[分包策略](https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages/independent.html)
 
 
-如有其它问题，也欢迎在 [issue](https://github.com/xbmlz/echarts-for-uniapp/issues) 中向我们反馈，谢谢！
+如有其它问题，也欢迎在 [issue](https://github.com/xbmlz/echarts-for-uniapp/issues) 中反馈，谢谢！
