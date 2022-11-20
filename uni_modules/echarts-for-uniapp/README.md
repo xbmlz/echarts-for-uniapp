@@ -54,6 +54,13 @@ export default {
   }
 }
 
+<style>
+.content {
+	width: 375px;
+	height: 375px;
+}
+</style>
+
 ```
 
 
@@ -79,13 +86,15 @@ export default {
 | :--: | :--: | :--: | :-- |
 | forceUseOldCanvas | Boolean | false  | 强制使用旧版Canvas(不推荐) |
 | option | Object |  | [ECharts Option](https://echarts.apache.org/zh/option.html) |
-| theme | Object|String | [Eharts Theme](https://echarts.apache.org/handbook/zh/concepts/style/) |
+| theme | String| | [Eharts Theme](https://echarts.apache.org/zh/download-theme.html) |
+| map | Object| | 使用地图组件时，注册地图，详见：[registerMap](https://echarts.apache.org/en/api.html#echarts.registerMap) |
 
 
 ### 事件
 
 | 事件名 | 参数 | 返回数据 | 描述 |
 | --- | --- | --- | --- |
+| inited |  | chart | 初始化后返回 chart 对象 |
 | click |  | event | 点击 |
 | touchstart |  | event | 按下 |
 | touchmove |  | event | 移动 |
@@ -95,6 +104,53 @@ export default {
 | mouseup |  | event | 松开 |
 
 ## FAQ
+
+### 如何获取图表实例？
+
+```vue
+<template>
+  <view class="content">
+    <uni-chart @inited="inited" />
+  </view>
+</template>
+
+<script>
+export default {
+	data() {
+		return {}
+	},
+	methods: {
+		inited(chart) {
+			// do something
+		}
+	}
+}
+</script>
+```
+
+### 如何延迟加载图表？
+
+参见 [pages/lazyLoad](./pages/lazyLoad/index.vue) 的例子，可以在获取数据后再初始化数据。
+
+### 如何在一个页面中加载多个图表？
+
+参见 [pages/multiCharts](./pages/multiCharts/index.vue) 的例子。
+
+### 如何使用 Tooltip？
+
+具体使用方法和 ECharts 相同，例子参见 [pages/line](./pages/line/index.vue)
+
+### 如何保存为图片？
+
+参见 [pages/saveCanvas](./pages/saveCanvas/index.vue) 的例子。
+
+### 多主题色
+
+参见 [pages/themeColor](./pages/themeColor/index.vue) 的例子 。
+
+### 完整示例
+
+参见 [pages](./pages)
 
 ### 文件太大怎么办？
 

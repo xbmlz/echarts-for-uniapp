@@ -1,15 +1,81 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/bar/index"
+		},
+		{
+			"path": "pages/scatter/index"
+		},
+		{
+			"path": "pages/pie/index"
+		},
+		{
+			"path": "pages/line/index"
+		},
+		{
+			"path": "pages/funnel/index"
+		},
+		{
+			"path": "pages/gauge/index"
+		},
+		{
+			"path": "pages/k/index"
+		}, 
+		{
+			"path": "pages/radar/index"
+		},
+		{
+			"path": "pages/heatmap/index"
+		},
+		{
+			"path": "pages/tree/index"
+		},
+		{
+			"path": "pages/treemap/index"
+		},
+		{
+			"path": "pages/sunburst/index"
+		},
+		{
+			"path": "pages/map/index"
+		},
+		{
+			"path": "pages/graph/index"
+		},
+		{
+			"path": "pages/boxplot/index"
+		},
+		{
+			"path": "pages/parallel/index"
+		},
+		{
+			"path": "pages/sankey/index"
+		},
+		{
+			"path": "pages/themeRiver/index"
+		},
+		{
+			"path": "pages/lazyLoad/index"
+		},
+		{
+			"path": "pages/multiCharts/index"
+		},
+		{
+			"path": "pages/move/index"
+		},
+		{
+			"path": "pages/saveCanvas/index"
+		},
+		{
+			"path": "pages/themeColor/index"
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "echarts-for-uniapp",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
