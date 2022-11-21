@@ -42,7 +42,7 @@
 import '../../static/echarts.min.js'
 // #endif
 
-// #ifdef VUE2 || MP-WEIXIN
+// #ifdef VUE2 || MP-WEIXIN || MP-QQ
 const echarts = require('../../static/echarts.min.js')
 // #endif
 
@@ -61,7 +61,7 @@ export default {
 		},
 		// 主题名称，内置
 		theme: {
-			type: [String, Object],
+			type: [String, Object]
 		},
 		// 图表配置
 		option: {
@@ -124,7 +124,6 @@ export default {
 		},
 		// register theme color
 		registerTheme(name, opt) {
-			console.log('registerTheme', name, opt)
 			echarts.registerTheme(name, opt)
 		},
 		// init H5 app-vue
@@ -138,29 +137,32 @@ export default {
 		initMiniProgram() {
 			const version = this.systemInfo.SDKVersion
 			console.log(`当前基础库版本为: ${version}`)
+			let oldVersion,
+				baseVersion = ''
+			let canUseNewCanvas = false
 
-			const oldVersion = '1.9.91'
-			const baseVersion = '2.9.0'
+			// #ifdef MP-WEIXIN
+			oldVersion = '1.9.91'
+			baseVersion = '2.9.0'
+			canUseNewCanvas = this.compareVersion(version, baseVersion) >= 0
+			// #endif
 
-			let canUseNewCanvas = this.compareVersion(version, baseVersion) >= 0
+			// #ifdef MP-QQ
+			canUseNewCanvas = false
+			// #endif
 
 			if (this.$props.forceUseOldCanvas) {
 				if (canUseNewCanvas) console.warn('开发者强制使用旧canvas,建议关闭')
 				canUseNewCanvas = false
 			}
 			this.useNewCanvas = canUseNewCanvas && !this.forceUseOldCanvas
+
 			if (this.useNewCanvas) {
 				// 2.9.0 可以使用 <canvas type="2d"></canvas>
 				this.initNewCanvas()
 			} else {
-				const isValid = this.compareVersion(version, oldVersion) >= 0
-				if (!isValid) {
-					console.error(`基础库版本过低，需大于等于 ${oldVersion}。`)
-					return
-				} else {
-					console.warn(`建议将基础库调整大于等于${baseVersion}版本。升级后绘图将有更好性能`)
-					this.initOldCanvas()
-				}
+				console.warn(`建议将基础库调整大于等于${baseVersion}版本。升级后绘图将有更好性能`)
+				this.initOldCanvas()
 			}
 		},
 		// initNewCanvas
@@ -171,26 +173,37 @@ export default {
 				.node(res => {
 					const canvasNode = res.node
 					const ctx = canvasNode?.getContext('2d')
-					canvasNode.width = canvasNode.width * this.systemInfo.pixelRatio
-					canvasNode.height = canvasNode.height * this.systemInfo.pixelRatio
-					ctx.scale(this.pixelRatio, this.pixelRatio)
+					const dpr = this.systemInfo.pixelRatio
+					canvasNode.width = canvasNode.width * dpr
+					canvasNode.height = canvasNode.height * dpr
+					ctx.scale(dpr, dpr)
 					const canvas = new UniCanvas(ctx, canvasNode)
-					this.initECharts(canvas, canvasNode.width, canvasNode.width, this.pixelRatio)
+					this.initECharts(canvas, canvasNode.width, canvasNode.width, dpr)
 				})
 				.exec()
 		},
 		// initOldCanvas
 		initOldCanvas() {
 			// 1.9.91 <= sdkVersion < 2.9.0：原来的方式初始化
-			const ctx = uni.createCanvasContext(`#${this.canvasId}`, this)
-			const canvas = new UniCanvas(ctx)
+			let dpr = 1
+			let canvasNode = {}
 			const query = uni.createSelectorQuery().in(this)
 			query
 				.select(`#${this.canvasId}`)
-				.boundingClientRect(res => {
-					// 微信旧的canvas不能传入dpr
-					this.initECharts(res.width, res.height, 1)
-				})
+				.fields(
+					{
+						size: true,
+						context: true
+					},
+					res => {
+						const ctx = res.context
+						canvasNode.width = res.width * dpr
+						canvasNode.height = res.height * dpr
+						ctx.scale(dpr, dpr)
+						const canvas = new UniCanvas(ctx, canvasNode)
+						this.initECharts(canvas, canvasNode.width, canvasNode.height, dpr)
+					}
+				)
 				.exec()
 		},
 		// init
@@ -198,11 +211,12 @@ export default {
 			echarts.setPlatformAPI({ createCanvas: () => canvas })
 			const theme = this.$props.theme
 			let themeName = ''
-			console.log('typeof theme', typeof theme)
 			if (typeof theme === 'object') {
-				this.registerTheme(theme.name, theme.opt)
-				themeName = theme.name
-			} 
+				if (theme) {
+					this.registerTheme(theme.name, theme.opt)
+					themeName = theme.name
+				}
+			}
 			if (typeof theme === 'string') {
 				themeName = theme
 			}
