@@ -170,17 +170,17 @@ export default {
 			const query = uni.createSelectorQuery().in(this)
 			query
 				.select(`#${this.canvasId}`)
-				.node(res => {
-					const canvasNode = res.node
-					const ctx = canvasNode?.getContext('2d')
-					const dpr = this.systemInfo.pixelRatio
-					canvasNode.width = canvasNode._width * dpr
-					canvasNode.height = canvasNode._height * dpr
-					ctx.scale(dpr, dpr)
-					const canvas = new UniCanvas(ctx, canvasNode)
-					this.initECharts(canvas, canvasNode.width, canvasNode.height, dpr)
-				})
-				.exec()
+				.fields({ node: true, size: true })
+				.exec((res) => {
+					const { width, height, node } = res[0];
+					const ctx = node?.getContext("2d");
+					const dpr = this.systemInfo.pixelRatio;
+					node.width = width * dpr;
+					node.height = height * dpr;
+					ctx.scale(dpr, dpr);
+					const canvas = new UniCanvas(ctx, node);
+					this.initECharts(canvas, node.width, node.height, dpr);
+				});
 		},
 		// initOldCanvas
 		initOldCanvas() {
