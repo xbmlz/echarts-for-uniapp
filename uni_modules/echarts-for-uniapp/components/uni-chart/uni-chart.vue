@@ -174,11 +174,11 @@ export default {
 					const canvasNode = res.node
 					const ctx = canvasNode?.getContext('2d')
 					const dpr = this.systemInfo.pixelRatio
-					canvasNode.width = canvasNode.width * dpr
-					canvasNode.height = canvasNode.height * dpr
+					canvasNode.width = canvasNode._width * dpr
+					canvasNode.height = canvasNode._height * dpr
 					ctx.scale(dpr, dpr)
 					const canvas = new UniCanvas(ctx, canvasNode)
-					this.initECharts(canvas, canvasNode.width, canvasNode.width, dpr)
+					this.initECharts(canvas, canvasNode.width, canvasNode.height, dpr)
 				})
 				.exec()
 		},
