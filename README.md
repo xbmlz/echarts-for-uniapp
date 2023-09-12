@@ -1,3 +1,5 @@
+> 该项目已暂停维护，请使用 `https://limeui.qcoon.cn/#/echart`
+
 # 在 uni-app 中使用 Apache ECharts
 
 本项目是 [Apache ECharts](https://github.com/apache/echarts) 的uni-app版本，支持 [Vue.js](https://vuejs.org/) 2/3，以及使用的示例。
